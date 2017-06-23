@@ -4,7 +4,8 @@
 
 > Должна быть проверка принадлежности клиента партнёру
 
-> агентам доступны так же методы клиентов
+
+> Агентам доступны так же методы клиентов
 
 ## Получение клиентов агента
 
@@ -41,7 +42,7 @@
 			<th>Описание</th>
 		</tr>
 		<tr>
-			<td>`id`</td>
+			<td><code>id</code></td>
 			<td>number</td>
 			<td></td>
 			<td>да</td>
@@ -49,7 +50,7 @@
 			<td>Уникальный идентификатор клиента</td>
 		</tr>
 		<tr>
-			<td>`name`</td>
+			<td><code>name</code></td>
 			<td>string</td>
 			<td></td>
 			<td>да</td>
@@ -57,7 +58,7 @@
 			<td>Название клиента</td>
 		</tr>
 		<tr>
-			<td>`description`</td>
+			<td><code>description</code></td>
 			<td>string</td>
 			<td></td>
 			<td></td>
@@ -65,7 +66,7 @@
 			<td>Описание к клиенту</td>
 		</tr>
 		<tr>
-			<td>`creation_date_time`</td>
+			<td><code>creation_date_time</code></td>
 			<td>iso8601</td>
 			<td>YYYY-MM-DD
 hh:mm:ss</td>
@@ -74,15 +75,15 @@ hh:mm:ss</td>
 			<td>Дата и время создания клиента</td>
 		</tr>
 		<tr>
-			<td>`status`</td>
+			<td><code>status</code></td>
 			<td>enum</td>
 			<td>
 				<ul>
-					<li>`waiting`</li>
-					<li>`active`</li>
-					<li>`manual_lock`</li>
-					<li>`limit_lock`</li>
-					<li>`debt_lock`</li>
+					<li><code>waiting</code></li>
+					<li><code>active</code></li>
+					<li><code>manual_lock</code></li>
+					<li><code>limit_lock</code></li>
+					<li><code>debt_lock</code></li>
 				</ul>
 			</td>
 			<td>да</td>
@@ -90,7 +91,7 @@ hh:mm:ss</td>
 			<td>Статус клиента</td>
 		</tr>
 		<tr>
-			<td>`status_change_date_time`</td>
+			<td><code>status_change_date_time</code></td>
 			<td>iso8601</td>
 			<td>YYYY-MM-DD
 hh:mm:ss</td>
@@ -99,7 +100,7 @@ hh:mm:ss</td>
 			<td>Дата и время изменения статуса</td>
 		</tr>
 		<tr>
-			<td>`monthly_base_limit`</td>
+			<td><code>monthly_base_limit</code></td>
 			<td>number</td>
 			<td></td>
 			<td></td>
@@ -108,7 +109,7 @@ hh:mm:ss</td>
 деньгах.</td>
 		</tr>
 		<tr>
-			<td>`monthly_base_notify_limit`</td>
+			<td><code>monthly_base_notify_limit</code></td>
 			<td>number</td>
 			<td></td>
 			<td></td>
@@ -116,10 +117,10 @@ hh:mm:ss</td>
 			<td>Пороговое значение общего месячного лимита при
 достижению которого отправляется уведомление на
 электронный адрес указанный в параметре
-`"monthly_base_notify_email"`</td>
+<code>"monthly_base_notify_email"</code></td>
 		</tr>
 		<tr>
-			<td>`monthly_base_notify_emails`</td>
+			<td><code>monthly_base_notify_emails</code></td>
 			<td>array</td>
 			<td></td>
 			<td></td>
@@ -129,7 +130,7 @@ hh:mm:ss</td>
 лимита</td>
 		</tr>
 		<tr>
-			<td>`monthly_calls_limit`</td>
+			<td><code>monthly_calls_limit</code></td>
 			<td>number</td>
 			<td></td>
 			<td></td>
@@ -138,7 +139,7 @@ hh:mm:ss</td>
 количестве звонков.</td>
 		</tr>
 		<tr>
-			<td>`monthly_calls_notify_limit`</td>
+			<td><code>monthly_calls_notify_limit</code></td>
 			<td>number</td>
 			<td></td>
 			<td></td>
@@ -146,10 +147,10 @@ hh:mm:ss</td>
 			<td>Пороговое значение месячного лимита по звонкам
 при достижению которого отправляется
 уведомление на электронный адрес указанный в
-параметре `"monthly_calls_notify_email"`</td>
+параметре <code>"monthly_calls_notify_email"</code></td>
 		</tr>
 		<tr>
-			<td>`monthly_calls_notify_emails`</td>
+			<td><code>monthly_calls_notify_emails</code></td>
 			<td>array</td>
 			<td></td>
 			<td></td>
@@ -159,7 +160,7 @@ hh:mm:ss</td>
 звонкам</td>
 		</tr>
 		<tr>
-			<td>`daily_calls_limit`</td>
+			<td><code>daily_calls_limit</code></td>
 			<td>number</td>
 			<td></td>
 			<td></td>
@@ -168,7 +169,7 @@ hh:mm:ss</td>
 количестве звонков.</td>
 		</tr>
 		<tr>
-			<td>`daily_calls_notify_limit`</td>
+			<td><code>daily_calls_notify_limit</code></td>
 			<td>number</td>
 			<td></td>
 			<td></td>
@@ -177,11 +178,11 @@ hh:mm:ss</td>
 				Пороговое значение дневного лимита по звонкам
 при достижению которого отправляется
 уведомление на электронный адрес указанный в
-параметре `"daily_calls_notify_email"`
+параметре <code>"daily_calls_notify_email"</code>
 			</td>
 		</tr>
 		<tr>
-			<td>`daily_calls_notify_emails`</td>
+			<td><code>daily_calls_notify_emails</code></td>
 			<td>array</td>
 			<td></td>
 			<td></td>
@@ -194,7 +195,7 @@ hh:mm:ss</td>
 			<td colspan="6">Список сайтов клиента</td>
 		</tr>
 		<tr>
-			<td>`sites`</td>
+			<td><code>sites</code></td>
 			<td>array</td>
 			<td></td>
 			<td></td>
@@ -202,7 +203,7 @@ hh:mm:ss</td>
 			<td>Список сайтов клиента</td>
 		</tr>
 		<tr>
-			<td>`site_id`</td>
+			<td><code>site_id</code></td>
 			<td>number</td>
 			<td></td>
 			<td></td>
@@ -210,7 +211,7 @@ hh:mm:ss</td>
 			<td>Уникальный индентификатор сайта</td>
 		</tr>
 		<tr>
-			<td>`site_domain_name`</td>
+			<td><code>site_domain_name</code></td>
 			<td>string</td>
 			<td></td>
 			<td></td>
@@ -221,7 +222,7 @@ hh:mm:ss</td>
 			<td colspan="6">Тарифный план</td>
 		</tr>
 		<tr>
-			<td>`tariff_plan_id`</td>
+			<td><code>tariff_plan_id</code></td>
 			<td>number</td>
 			<td></td>
 			<td>да</td>
@@ -229,7 +230,7 @@ hh:mm:ss</td>
 			<td>Уникальный идентификатор тарифного плана</td>
 		</tr>
 		<tr>
-			<td>`tariff_plan_name`</td>
+			<td><code>tariff_plan_name</code></td>
 			<td>string</td>
 			<td></td>
 			<td>да</td>
@@ -527,11 +528,12 @@ hh:mm:ss</td>
 ### Список возвращаемых ошибок
 
 Смотрим раздел "[Список ошибок для методов с глаголом update](#)"
-+
+
+\+
 
 Текст | Код  | Мнемоника | Описание
 :---- | :--- | :-------- | :-------
-```An attempt was made to use a status that is not correct in this state``` | -32602 | `invalid_state` | Указанный статус некорректен для клиента в текущем состоянии
+*An attempt was made to use a status that is not correct in this state* | -32602 | `invalid_state` | Указанный статус некорректен для клиента в текущем состоянии
 
 
 ## Смена тарифного плана у клиента агента
