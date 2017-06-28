@@ -273,10 +273,7 @@ http://api.comagic.ru/v4.0
 *The required parameter has been missed* | `-32602` | `required_parameter_missed` | Обязательный параметр не передали
 *Unexpected method parameter(s)* | `-32602` | `invalid_parameter_value` | Если в `"params"` были переданы параметры которые не предусмотрены JSON структурой метода или указаны значения не соответствующие допустимым значениям
 *A new data limit has been exceeded* | `-32602` | `data_limit_exceeded` | Ошибка возникает в случае, если у клиента было достигнуто максимальное количество данных в таблицах конфигурации сервиса. количество данных определяется количеством строк и принятое ограничение установлено в 100 000 строк
-*Добавляю ошибку `tariff_restrictions` `-32602` Action is not
-allowed for your tariff plan. You need contact support service
-or change your tariff plan settings in your account. Когда
-возникают ограничения тарифного плана* | `-32602` | `tariff_restrictions` | Любые ограничения тарифного плана
+*Добавляю ошибку `tariff_restrictions` `-32602` Action is not allowed for your tariff plan. You need contact support service or change your tariff plan settings in your account. Когда возникают ограничения тарифного плана* | `-32602` | `tariff_restrictions` | Любые ограничения тарифного плана
 
 ## Поддержка языковых схем
 
@@ -669,3 +666,1984 @@ JSON структура:
 ```
 
 ## Представление возвращаемых данных
+
+### Отдельный список возвращаемых столбцов
+
+В глаголе получения данных `"get"` (см. раздел [Глаголы используемые в именовании методов](#)) может быть указан
+специальный необязательный примитив `"fields"` с типом массив, который может содержать список полей которые необходимо
+показать в выводе. Если примитив `"fields"` не используется, то в выводе показываются все поля ресурса.
+
+> Список полей индивидуален для каждого метода.  
+
+JSON структура:
+
+```json
+{
+  "jsonrpc":"2.0",
+  "id":"number",
+  "method":"string",
+  "params":{
+    "fields":[
+      "string"
+    ]
+  }
+}
+```
+
+### Возможные ошибки в представление возвращаемых данных
+
+Текст | Код | Мнемоника | Описание
+------------ | --- | --------- | --------
+*Unexpected method parameter(s)* | `-32602` | `unexpected_parameters` | Передан ошибочный параметр или параметр, которого не существует
+
+
+## Пользователи API и аутентификация
+
+> К пользователям и ключам доступа применяются права доступа аналогичные правам доступа в личном кабинете
+
+### Доступ по ключу
+
+Ключи генерируются на уровне пользователя в разделе личного кабинета "Аккаунт → Управление пользователями"  
+Существует два типа ключей:
+* Постоянный;
+* Временный;
+
+Постоянный ключ имеет неограниченное время действия.  
+Временный ключ имеет конкретную дату окончания действия ключа.
+
+### Доступ по логину и паролю
+
+Используется аутентификация с использованием сессий
+
+> Время жизни сессии конфигурируемый параметр. Значение по умолчанию 1 час.
+
+### Доступ через oAuth
+
+Необходимо заложить возможность использования следующего метода oAuth - [Authorization Code](https://tools.ietf.org/html/rfc6749#section-4.1)  
+https://tr.dev.uiscom.ru/browse/INT-118
+
+## Биллинг
+
+Тип компонента | Мнемоника компонента | Название компонента | Лимиты на компонент | Список методов
+--- | --- | --- | --- | ---
+Корневой | `dataapi_agent` | Data API для агентов | <ul><li>`max_minute_dataapi_a gent_point` - Балов к агентским методам в минуту;</li><li>`max_day_dataapi_age nt_point` - Балов к агентским методам в день</li></ul> Значения для лимитов по умолчанию: <ul><li>`max_minute_dataapi_a gent_point = 60`</li><li>`max_day_dataapi_age nt_point = 2000`</li></ul> | [[Агенты] Управление клиентами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104067) `login.user`, `logout.user`
+Корневой | `dataapi` | Data API | <ul> <li>`max_minute_dataapi_point` - Балов Data API в минуту;</li> <li>`max_day_dataapi_point` - Балов Data API в день</li> </ul> Значения для лимитов по умолчанию: <ul><li>`max_minute_dataapi_point = 60`</li><li>`max_day_dataapi_point = 2000`</li></ul> | `login.user`, `logout.user`
+Подкомпонента `dataapi` | `dataapi_reports` | Data API для получения отчётов и статистики | По умолчанию максимальный период выгрузки отчёта с даты получения запроса = 3 месяца. | [Управление отчётами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104720)
+Подкомпонента `dataapi` | `dataapi_provisioning` | Data API для настройки |  | [Управление SIP-линиями](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104542), [Управление АОН'ами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104358), [Управление адресной книгой](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104154), [Управление виртуальными номерами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104352), [Управление графиками активности](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104222), [Управление записанными разговорами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104690), [Управление звуковыми файлами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104407), [Управление звуковыми файлами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104407), [Управление отчётами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104720), [Управление рекламными кампаниями](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104040), [Управление сайтами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104017), [Управление сегментами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104112), [У правление сотрудниками](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104152), [Управление сценариями](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104409), [Управление тегами](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104011), [Управление уведомлениями](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104354), [Управление файлами голосовой почты](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=20185219), [Управление чёрным списком](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104156), [Управление целями](https://doc.dev.uiscom.ru/pages/viewpage.action?pageId=19104651)
+
+
+## Мониторинг и метрики
+
+> Метрики могут быть получены по HTTP в виде JSON структуры
+
+1. Мониторинг CPU и Памяти;
+1. Счётчик задержки выполнения запроса. Значение в миллисекундах;
+1. Счётчик количества внутренних критических ошибок;
+1. Счётчик общего количества внутренних ошибок;
+1. Счётчик количество ошибочных ответов связанных с превышением лимитов;
+1. Счётчик количества ошибочных ответов связанных с неправильным логином/паролем;
+1. Счётчик количества успешных запросов к API;
+1. Счётчик задержки ответа от БД. Значение в миллисекундах.
+
+
+## Алгоритм аутентификации и авторизации агента
+
+Кейс: Пользователь агента проходит аутентификацию и хочет выполнить действия с оболочкой своего клиента
+
+Алгоритм:
+
+1. Пользователь агента проходит аутентификацию по логину и паролю на сервере Data API и получает временный ключ доступа
+1. Пользователь агента выполняет запрос к методу `get.customers`
+1. Сервер Data API проверяет наличие permission_unit'ов `"client"` (Клиент), `"client_new"` (Новые клиенты), `"client_management"` (Управление клиентами)
+1. Права есть
+1. Пользователь агента выполняет запрос к методу получения списка пользователей из под которых можно делать запросы
+1. Сервер Data API проверяет наличие permission_unit'ов `"client_user"` (Пользователь), `"client_user_new"` (Новый пользователь), `"client_user_all"` (Все пользователи)
+1. Делает запрос к методу управления оболочкой и передает туда `user_id`, который был получен в пункте 5
+
+Проверки, при вызове метода управления оболочкой из под пользователя агента
+
+1. Что у пользователя агента есть права доступа к Data API
+1. Что у пользователя из оболочки есть права доступа к Data API
+1. Что у пользователя агента, есть доступ к клиенту и это permission `unit = "client"`
+1. Что у пользователя, который указан как пользователь оболочки есть `permission_unit`, который назначен на метод
+
+## Проверки при вызове метода
+
+Ниже находится набор проверок, которые выполняются при вызове любого метода
+
+* Проверяем IP в белом списке
+* Проверяем, что подключен компонент
+
+> Для агентского метода проверяется компонент `dataapi_agent`
+> При вызове клиентского метода из под агента проверяется компонент `dataapi`, `dataapi_reports`, `dataapi_provisioning` на уровне клиента
+
+* Проверяем состояние лимитов
+* Проверяем стейт клиента или агента
+
+> Для агентских методов проверяется стейт агента
+> Для клиентских методов вызванных из под агента проверяется стейт клиента
+
+* Проверяем api_permission - `dataapi`, `callapi`, `dataapi_agent`
+
+> Если запрос делается из под агента к клиентскому методу, то для пользователя агента так же проверяется `api_permission = dataapi_agent`
+
+* Проверяем права доступа пользователя `permission_unit`
+
+> Если передан `user_id` или `login` с флагом `is_system = true	`, то мы такие запросы отбиваем с ошибкой `"forbidden"`
+
+> Для токенов с флагом `is_system = true` проверки аналогичны описанным ниже, кроме того что не проверяем лимиты и подключенные компоненты.
+
+## Список методов
+
+**Таблица 7. Список методов и их описание**
+
+<table>
+	<tbody>
+		<tr>
+			<th>Название метода</th>
+			<th>Вес метода</th>
+			<th>Описание</th>
+			<th>Data components</th>
+			<th>Permission Unit</th>
+			<th>select</th>
+			<th>insert</th>
+			<th>update</th>
+			<th>delete</th>
+		</tr>
+		<tr>
+			<td align="center" colspan="9">Общие методы</td>
+		</tr>
+		<tr>
+			<td><code>login.users</code></td>
+			<td></td>
+			<td>Аутентификация: вход</td>
+			<td rowspan="2">Не зависят</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>logout.users</code></td>
+			<td></td>
+			<td>Аутентификация: выход</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td align="center" colspan="9">Методы партнёров</td>
+		</tr>
+		<tr>
+			<td><code>get.customers</code></td>
+			<td></td>
+			<td>Получить клиентов партнёра</td>
+			<td rowspan="8">Не зависят</td>
+			<td><code>client_selected</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.customers</code></td>
+			<td></td>
+			<td>Создание клиента партнёра</td>
+			<td><code>client_new</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.customers</code></td>
+			<td></td>
+			<td>Редактирование клиента партнёра</td>
+			<td><code>client_selected</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.customer_status</code></td>
+			<td></td>
+			<td>Изменение статуса клиента партнёра - Архивировать, Заблокировать, Активировать</td>
+			<td><code>client_selected</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.customer_tariff_plans</code></td>
+			<td></td>
+			<td>Смена тарифного плана клиента партнёра</td>
+			<td><code>client_selected</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.customer_password</code></td>
+			<td></td>
+			<td>Смена пароля клиенту партнёра</td>
+			<td><code>client_selected</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.tariff_plans</code></td>
+			<td></td>
+			<td>Получение списка тарифных планов доступных партнёру</td>
+			<td><code>client_selected</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code></code></td>
+			<td></td>
+			<td>Метод получения списка пользователей из под которых можно
+вызывать методы клиента агента</td>
+			<td><code>client_user</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td align="center" colspan="9">Методы клиентов и партнёров</td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление сайтами</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>create.sites</code></td>
+			<td></td>
+			<td>Создание сайта</td>
+			<td rowspan="7">
+				<code>call_tracking</code>,
+				<code>consultant</code>,
+				<code>lead</code>,
+				<code>sitephone</code>
+			</td>
+			<td><code>site_new</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.sites</code></td>
+			<td></td>
+			<td>Удаление сайта</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>get.sites</code></td>
+			<td></td>
+			<td>Получение списка сайтов</td>
+			<td><code>site_settings</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.sites</code></td>
+			<td></td>
+			<td>Редактирование сайта</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.site_categories</code></td>
+			<td></td>
+			<td>Получение списка типов сайтов</td>
+			<td><code>site_settings</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.site_industries</code></td>
+			<td></td>
+			<td>Получение списка отраслей сайта</td>
+			<td><code>site_settings</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.site_tracking_code</code></td>
+			<td></td>
+			<td>Получение кода вставки для сайта</td>
+			<td><code>site_settings</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.site_blocks</code></td>
+			<td></td>
+			<td>Создание блока для номеров</td>
+			<td><code>call_trracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.site_blocks</code></td>
+			<td></td>
+			<td>Удаление блока для номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>update.site_blocks</code></td>
+			<td></td>
+			<td>Редактирование блока для номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.site_blocks</code></td>
+			<td></td>
+			<td>Получение блоков для номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.site_block_text_templates</code></td>
+			<td></td>
+			<td>Создание текстового шаблона номера для блока номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.site_block_image_templates</code></td>
+			<td></td>
+			<td>Создание шаблона номера в виде картинки для блока номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.site_block_phone_templates</code></td>
+			<td></td>
+			<td>Создание шаблона замены по номеру на сайте для блока
+номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.site_block_templates</code></td>
+			<td></td>
+			<td>Удаление шаблона номера для блока номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.site_block_text_templates</code></td>
+			<td></td>
+			<td>Редактирование текстового шаблона номера для блока номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.site_block_image_templates</code></td>
+			<td></td>
+			<td>Редактирование шаблона номера в виде картинки для блока
+номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.site_block_phone_templates</code></td>
+			<td></td>
+			<td>Редактирование шаблона замены по номеру на сайте для блока
+номеров</td>
+			<td><code>call_tracking</code></td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление тегами</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.tags</code></td>
+			<td></td>
+			<td>Получение списка тегов</td>
+			<td rowspan="7">не зависят</td>
+			<td><code>tag_management</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.tags</code></td>
+			<td></td>
+			<td>Создание тега</td>
+			<td><code>tag_management</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.tags</code></td>
+			<td></td>
+			<td>Редактирование тега</td>
+			<td><code>tag_management</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.tags</code></td>
+			<td></td>
+			<td>Удаление тега</td>
+			<td><code>tag_management</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>set.tag_sales</code></td>
+			<td></td>
+			<td>Проставление тега продажа на обращение</td>
+			<td><code>tag_management</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>set.tag_communications</code></td>
+			<td></td>
+			<td>Проставление тега на обращение</td>
+			<td><code>tag_management</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>set.tag_communications</code></td>
+			<td></td>
+			<td>Снятие тега с обращения</td>
+			<td><code>tag_management</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление сотрудниками</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.employees</code></td>
+			<td></td>
+			<td>Получение списка сотрудников</td>
+			<td rowspan="13">не зависят</td>
+			<td><code>employees</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.employees</code></td>
+			<td></td>
+			<td>Создание сотрудников</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.employees</code></td>
+			<td></td>
+			<td>Удаление сотрудника</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>update.employees</code></td>
+			<td></td>
+			<td>Редактирование сотрудника</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.group_employees</code></td>
+			<td></td>
+			<td>Создание группы сотрудников</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.group_employees</code></td>
+			<td></td>
+			<td>Удаление группы сотрудников</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>get.group_employees</code></td>
+			<td></td>
+			<td>Получение списка групп сотрудников</td>
+			<td><code>employees</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.group_employees</code></td>
+			<td></td>
+			<td>Редактирование группы сотрудников</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.group_employees_numbers</code></td>
+			<td></td>
+			<td>Изменение приоритета и доступности номера сотрудника в
+группе сотрудников</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.employee_positions</code></td>
+			<td></td>
+			<td>Получение списка должностей сотрудников</td>
+			<td><code>employees</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.employee_positions</code></td>
+			<td></td>
+			<td>Создание должности сотрудника</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.employee_positions</code></td>
+			<td></td>
+			<td>Редактирование должности сотрудника</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.employee_positions</code></td>
+			<td></td>
+			<td>Удаление должности сотрудника</td>
+			<td><code>employees</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление графиками активности</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.schedules</code></td>
+			<td></td>
+			<td>Получение списка графиков активности</td>
+			<td rowspan="4">
+				<code>va</code>,
+				<code>consultant</code>,
+				<code>lead</code>,
+				<code>sitephone</code>
+			</td>
+			<td><code>schedules</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.schedules</code></td>
+			<td></td>
+			<td>Создание графика активности</td>
+			<td><code>schedules</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.schedules</code></td>
+			<td></td>
+			<td>Удаление графика активности</td>
+			<td><code>schedules</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>update.schedules</code></td>
+			<td></td>
+			<td>Редактирование графика активности</td>
+			<td><code>schedules</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление адресной книгой</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.contacts</code></td>
+			<td></td>
+			<td>Получение списка контактов в адресной книге</td>
+			<td rowspan="12">не зависят</td>
+			<td><code>address_book</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.contacts</code></td>
+			<td></td>
+			<td>Добавление контакта в адресную книгу</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.contacts</code></td>
+			<td></td>
+			<td>Удаление контакта из адресной книги</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>update.contacts</code></td>
+			<td></td>
+			<td>Редактирование контакта в адресной книге</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.group_contacts</code></td>
+			<td></td>
+			<td>Создание группы контактов адресной книги</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.group_contacts</code></td>
+			<td></td>
+			<td>Удаление группы контактов адресной книги</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>get.group_contacts</code></td>
+			<td></td>
+			<td>Получение списка групп адресной книги</td>
+			<td><code>address_book</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.group_contacts</code></td>
+			<td></td>
+			<td>Редактирование группы контактов адресной книги</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.contact_organizations</code></td>
+			<td></td>
+			<td>Получение списка организаций контактов</td>
+			<td><code>address_book</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.contact_organizations</code></td>
+			<td></td>
+			<td>Создание организации контакта</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.contact_organizations</code></td>
+			<td></td>
+			<td>Редактирование организации контакта</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.contact_organizations</code></td>
+			<td></td>
+			<td>Удаление организации контакта</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление чёрным списком</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.black_list</code></td>
+			<td></td>
+			<td>Получение списка контактов в чёрном списке</td>
+			<td rowspan="3">не зависят</td>
+			<td><code>address_book</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>add.black_list</code></td>
+			<td></td>
+			<td>Добавление контакта в чёрный список</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.black_list</code></td>
+			<td></td>
+			<td>Удаление одного или всех контактов из чёрного списка</td>
+			<td><code>address_book</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление списками АОН'ов</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>create.ani</code></td>
+			<td></td>
+			<td>Создание списка АОН'ов</td>
+			<td rowspan="5"><code>va</code></td>
+			<td>
+				<code>interfaces</code>, <code>va</code>, <code>client_user</code>,
+				<code>client_user_new</code>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.ani</code></td>
+			<td></td>
+			<td>Получение списка АОН'ов</td>
+			<td>
+				<code>interfaces</code>, <code>va</code>, <code>client_user</code>,
+				<code>client_user_new</code>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.ani</code></td>
+			<td></td>
+			<td>Редактирование указанного списка АОН'ов</td>
+			<td>
+				<code>interfaces</code>, <code>va</code>, <code>client_user</code>,
+				<code>client_user_new</code>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.ani</code></td>
+			<td></td>
+			<td>Удаление указанного списка АОН'ов или удаление АОН'а из
+списка</td>
+			<td>
+				<code>interfaces</code>, <code>va</code>, <code>client_user</code>,
+				<code>client_user_new</code>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>add.ani</code></td>
+			<td></td>
+			<td>Добавление АОН'а в существующий список АОН'ов</td>
+			<td>
+				<code>interfaces</code>, <code>va</code>, <code>client_user</code>,
+				<code>client_user_new</code>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление сегментами</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>create.segments</code></td>
+			<td></td>
+			<td>Создание сегмента</td>
+			<td rowspan="4">
+				<code>call_tracking</code>,
+				<code>consultant</code>,
+				<code>lead</code>
+			</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.segments</code></td>
+			<td></td>
+			<td>Редактирование сегмента</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.segments</code></td>
+			<td></td>
+			<td>Удаление сегмента</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>get.segments</code></td>
+			<td></td>
+			<td>Получение списка сегментов</td>
+			<td><code>site_settings</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление виртуальными номерами</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.available_virtual_numbers</code></td>
+			<td></td>
+			<td>Получение списка виртуальных номеров доступных для
+подключения</td>
+			<td rowspan="5">Не зависит</td>
+			<td><code>account_access</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>enable.virtual_numbers</code></td>
+			<td></td>
+			<td>Подключение виртуального номера</td>
+			<td><code>account_access</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>disable.virtual_numbers</code></td>
+			<td></td>
+			<td>Отключение виртуального номера</td>
+			<td><code>account_access</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>get.virtual_numbers</code></td>
+			<td></td>
+			<td>Получение списка подключённых виртуальных номеров</td>
+			<td><code>account_access</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.virtual_numbers</code></td>
+			<td></td>
+			<td>Редактирование настроек подключённого виртуального
+номера</td>
+			<td><code>account_access</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.virtual_number_rules</code></td>
+			<td></td>
+			<td>Получение списка правил для виртуального номера</td>
+			<td><code>va</code></td>
+			<td><code>va</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.virtual_number_rules</code></td>
+			<td></td>
+			<td>Удаление правила для виртуального номера</td>
+			<td><code>va</code></td>
+			<td><code>va</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>create.virtual_number_call_rules</code></td>
+			<td></td>
+			<td>Создание правила обработки звонка для виртуального номера</td>
+			<td><code>va</code></td>
+			<td><code>va</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.virtual_number_callout_rules</code></td>
+			<td></td>
+			<td>Создание Callout правила для виртуального номера</td>
+			<td><code>callout</code></td>
+			<td><code>va</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.virtual_number_callback_rules</code></td>
+			<td></td>
+			<td>Создание Callback правила для виртуального номера</td>
+			<td><code>callback</code></td>
+			<td><code>va</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.virtual_number_call_rules</code></td>
+			<td></td>
+			<td>Редактирование правила обработки звонка для виртуального
+номера</td>
+			<td><code>va</code></td>
+			<td><code>va</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.virtual_number_callout_rules</code></td>
+			<td></td>
+			<td>Редактирование Callout правила для виртуального номера</td>
+			<td><code>callout</code></td>
+			<td><code>va</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.virtual_number_callback_rules</code></td>
+			<td></td>
+			<td>Редактирование Callback правила для виртуального номера</td>
+			<td><code>callback</code></td>
+			<td><code>va</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.user_numbers</code></td>
+			<td></td>
+			<td>Добавление пользовательских номерами</td>
+			<td rowspan="4"><code>call_tracking</code></td>
+			<td><code>account_access</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.user_numbers</code></td>
+			<td></td>
+			<td>Удаление пользовательских номеров</td>
+			<td><code>account_access</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>update.user_numbers</code></td>
+			<td></td>
+			<td>Редактирование пользовательских номеров</td>
+			<td><code>account_access</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.user_numbers</code></td>
+			<td></td>
+			<td>Получение списка пользовательских номеров</td>
+			<td><code>account_access</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление SIP-линиями</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.sip_lines</code></td>
+			<td></td>
+			<td>Получение списка SIP-линий</td>
+			<td rowspan="5"><code>va</code></td>
+			<td><code>va</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.sip_lines</code></td>
+			<td></td>
+			<td>Создание SIP-линии</td>
+			<td><code>va</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.sip_lines</code></td>
+			<td></td>
+			<td>Редактирование SIP-линии</td>
+			<td><code>va</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.sip_lines</code></td>
+			<td></td>
+			<td>Удаление SIP-линии</td>
+			<td><code>va</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>update.sip_line_password</code></td>
+			<td></td>
+			<td>Генерация нового пароля для SIP-линии</td>
+			<td><code>va</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление записанными разговорами</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.call_records</code></td>
+			<td></td>
+			<td>Получение списка записанных разговоров</td>
+			<td rowspan="2"><code>va</code></td>
+			<td><code>call_recordings_employee</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.call_records</code></td>
+			<td></td>
+			<td>Удаление записи разговора</td>
+			<td><code>call_recordings_employee</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление уведомлениями</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>create.notifications</code></td>
+			<td></td>
+			<td>Создание уведомления</td>
+			<td rowspan="4"><code>notification</code></td>
+			<td><code>notifications</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.notifications</code></td>
+			<td></td>
+			<td><code>notifications</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.notifications</code></td>
+			<td></td>
+			<td><code>notifications</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.notifications</code></td>
+			<td></td>
+			<td><code>notifications</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление отчётами и статистикой</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.communications_report</code></td>
+			<td></td>
+			<td>Получение списка всех обращений</td>
+			<td>Не зависит</td>
+			<td>не нужны</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.calls_report</code></td>
+			<td></td>
+			<td>Получение отчёта по сессиям звонков</td>
+			<td>Не зависит</td>
+			<td>не нужны</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.call_legs_report</code></td>
+			<td></td>
+			<td>Получение отчета по CDR сессии звонка</td>
+			<td>Не зависит</td>
+			<td>не нужны</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.goals_report</code></td>
+			<td></td>
+			<td>Получение списка достигнутых целей</td>
+			<td>
+				<code>call_tracking</code>,
+				<code>consultant</code>,
+				<code>lead</code>
+			</td>
+			<td>не нужны</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.chats_report</code></td>
+			<td></td>
+			<td>Получение информации о чатах</td>
+			<td><code>consultant</code></td>
+			<td>не нужны</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.chat_messages_report</code></td>
+			<td></td>
+			<td>Получение всех сообщений чата</td>
+			<td><code>consultant</code></td>
+			<td>не нужны</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.offline_messages_report</code></td>
+			<td></td>
+			<td>Получение информации по оффлайн заявкам</td>
+			<td>
+				<code>consultant</code>,
+				<code>lead</code>
+			</td>
+			<td>не нужны</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.visitor_sessions_report</code></td>
+			<td></td>
+			<td>Получение информации о сессии посетителя</td>
+			<td>
+				<code>call_tracking</code>,
+				<code>consultant</code>,
+				<code>lead</code>
+			</td>
+			<td><code>visitor_contact_details</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.visitors_report</code></td>
+			<td></td>
+			<td>Получение информации о посетителе</td>
+			<td>
+				<code>call_tracking</code>,
+				<code>consultant</code>,
+				<code>lead</code>
+			</td>
+			<td><code>visitor_contact_details</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.sales_report</code></td>
+			<td></td>
+			<td>Получение списка сделок</td>
+			<td>
+				<code>call_tracking</code>,
+				<code>consultant</code>,
+				<code>lead</code>
+			</td>
+			<td>не нужны</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.financial_summary_report</code></td>
+			<td></td>
+			<td>Получение общего отчёта истории списаний</td>
+			<td rowspan="2">Не зависит</td>
+			<td><code>account_access</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.financial_call_legs_report</code></td>
+			<td></td>
+			<td>Получение детализированного отчёта истории списаний по
+звонкам</td>
+			<td><code>account_access</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.api_requests_report</code></td>
+			<td></td>
+			<td>Получение отчёта по запросам ко всем видам API</td>
+			<td>
+				<code>dataapi</code>,
+				<code>callapi</code>
+			</td>
+			<td><code>admin_interfaces</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление звуковыми файлами</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.media_files</code></td>
+			<td></td>
+			<td>Получение списка пользовательских и системных звуковых
+файлов</td>
+			<td><code>va</code></td>
+			<td><code>va</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление сценариями</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.scenarios</code></td>
+			<td></td>
+			<td>Получение списка сценариев</td>
+			<td><code>va</code></td>
+			<td><code>va</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление оставленными голосовыми сообщениями</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.voice_mail_records</code></td>
+			<td></td>
+			<td>Получение списка оставленных голосовых сообщений</td>
+			<td rowspan="2"><code>va</code></td>
+			<td><code>va</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.voice_mail_records</code></td>
+			<td></td>
+			<td>Удаление оставленного голосового сообщения</td>
+			<td><code>va</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление рекламными кампаниями</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>get.campaigns</code></td>
+			<td></td>
+			<td>Получение списка рекламных кампаний</td>
+			<td rowspan="7">
+				<code>call_tracking</code>,
+				<code>lead</code>,
+				<code>consultant</code>
+			</td>
+			<td>
+				<code>ac</code> or <code>ac_ext</code> or
+				<code>ac_undefined</code>
+			</td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>create.campaigns</code></td>
+			<td></td>
+			<td>Создание рекламной кампании</td>
+			<td><code>ac_new</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.campaigns</code></td>
+			<td></td>
+			<td>Удаление рекламной кампании</td>
+			<td><code>ac</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+		<tr>
+			<td><code>update.campaigns</code></td>
+			<td></td>
+			<td>Редактирование рекламной кампании</td>
+			<td>
+				<code>ac</code> or <code>ac_ext</code> or
+				<code>ac_undefined</code>
+			</td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.campaign_parameter_weights</code></td>
+			<td></td>
+			<td>Получение весов параметров рекламных кампаний</td>
+			<td>
+				<code>ac</code> or <code>ac_ext</code> or
+				<code>ac_undefined</code>
+			</td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.campaign_parameter_weights</code></td>
+			<td></td>
+			<td>Редактирование весов параметров рекламных кампаний</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.price_dynamic_call_tracking</code></td>
+			<td></td>
+			<td>Получение стоимости виртуальных номеров для динамического
+call tracking</td>
+			<td>
+				<code>ac</code> or <code>ac_ext</code> or
+				<code>ac_undefined</code>
+			</td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="9">Управление целями</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>select</td>
+			<td>insert</td>
+			<td>update</td>
+			<td>delete</td>
+		</tr>
+		<tr>
+			<td><code>create.goals</code></td>
+			<td></td>
+			<td>Создание цели</td>
+			<td rowspan="4">
+				<code>call_tracking</code>,
+				<code>consultant</code>,
+				<code>lead</code>
+			</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>update.goals</code></td>
+			<td></td>
+			<td>Редактирование цели</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>get.goals</code></td>
+			<td></td>
+			<td>Получение целей</td>
+			<td><code>site_settings</code></td>
+			<td>*</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><code>delete.goals</code></td>
+			<td></td>
+			<td>Удаление целей</td>
+			<td><code>site_settings</code></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>*</td>
+		</tr>
+	</tbody>
+</table>
+
+
+## Общие поля для всех методов
+
+**Таблица 7. Общие поля для всех методов**
+
+Название | Тип  | Обязательный | Допустимые значения | Описание
+:------- | :--- | :----------: | :-----------------: | :-------
+`id` | string или number | да |  | Уникальный идентификатор запроса к API <blockquote>Не передается в уведомлениях. Фигурирует только в "Отчет по запросам к API" параметр `"request_id"`</blockquote>
+`method` | string | да |  | Вызываемый метод (см. таблицу 7 Список методов) 
+`jsonrpc` | string | да | 2.0 | Номер спецификации JSON-RPC
+`params` | object | да |  | Содержит тело запроса к API. В зависимости от вызываемого метода тело запроса меняется.
+
+
+## Общие методы
+
+### Аутентификация
+
+#### Вход
+
+Метод | `login.user`
+:---- | :---------------
+Версия API | v2
+Статус | не реализован
+Описание | Вход и получение ключа сессии аутентификации
+Кому доступен | Партнёр, Клиент
+
+> Создаем на каждый логин отдельную сессию
+
+> Необходима реализация защиты от подбора пароля.  
+> Предлагается следующий вариант: писать в лог сообщение о неверном логине/пароле в котором будет IP адрес с которого происходит обращение. Далее с помощью `fail2ban` производить анализ логов и если количество обращений с неправильным логином и паролем превышает N, то добавить IP адрес в Iptables на N секунд.
+
+##### Параметры запроса
+
+Название | Тип  | Обязательный | Допустимые значения | Описание
+:------- | :--- | :----------: | :------------------ | :-------
+`login` | string | да |  | Логин пользователя
+`password` | string | да |  | Пароль пользователя
+
+##### Параметры ответа
+
+Название | Тип  | Обязательный | Допустимые значения | Описание
+:------- | :--- | :----------: | :------------------ | :-------
+`access_token` | string | да |  | Ключ сессии аутентификации
+`expire_at` | number | да |  | Timestamp когда выданный токен перестанет быть валидным
+`customer_id` | number | да |  | Уникальный идентификатор клиента. Всегда возвращается <blockquote>Всегда возвращается `customer_id`, которому принадлежит авторизовавшийся пользователь.</blockquote><blockquote>Может быть необходим для технологических партнёров к примеру для мапинга уведомлений</blockquote>
+
+> Время жизни полученного ключа сессии аутентификации после вызова метода `"login.user"` - 1 час. По истечению времени жизни ключа сессии его необходимо запрашивать заново, т.е. вызывать метод `"login.user"`.
+
+> Для совершения запросов к API возможно использование постоянного ключа аутентификации, который доступен в Личном кабинете.
+
+##### JSON структура запроса
+
+```json
+{
+  "jsonrpc":"2.0",
+  "id":"number",
+  "method":"login.user",
+  "params":{
+    "login":"string",
+    "password":"string"
+  }
+}
+```
+
+##### JSON структура ответа
+
+```json
+{
+  "jsonrpc":"2.0",
+  "id":"number",
+  "result":{
+    "data":{
+      "access_token":"string",
+      "expire":"number",
+      "customer_id":"number",
+      "success":"true"
+    }
+  }
+}
+```
+
+#### Выход
+
+Метод | `logout.user`
+:---- | :---------------
+Версия API | v3
+Статус | не реализован
+Описание | Выход и удаление ключа сессии аутентификации
+Кому доступен | Партнёр, Клиент
+
+##### Параметры метода
+
+Название | Тип  | Обязательный | Допустимые значения | Описание
+:------- | :--- | :----------: | :------------------ | :-------
+`access_token` | string | да |  | Ключ сессии аутентификации
+
+##### JSON структура запроса
+
+```json
+{
+  "jsonrpc":"2.0",
+  "id":"number",
+  "method":"logout.users",
+  "params":{
+    "access_token":"string"
+  }
+}
+```
+
+##### JSON структура ответа
+
+```json
+{
+  "jsonrpc":"2.0",
+  "id":"number",
+  "result":{
+    "data":{
+      "success":"true"
+    }
+  }
+}
+```
